@@ -1,4 +1,4 @@
-import { Person, Tense } from './types';
+import { Person, Tense } from "./types";
 
 export const verbEndings: {
   [key in Tense]?: {
@@ -65,6 +65,58 @@ export const verbEndings: {
       nosotros: "ábamos",
       vosotros: "abais",
       "ellos/ellas/Uds.": "aban",
+    },
+    er: {
+      yo: "ía",
+      tú: "ías",
+      "él/ella/Ud.": "ía",
+      nosotros: "íamos",
+      vosotros: "íais",
+      "ellos/ellas/Uds.": "ían",
+    },
+    ir: {
+      yo: "ía",
+      tú: "ías",
+      "él/ella/Ud.": "ía",
+      nosotros: "íamos",
+      vosotros: "íais",
+      "ellos/ellas/Uds.": "ían",
+    },
+  },
+  Future: {
+    ar: {
+      yo: "é",
+      tú: "ás",
+      "él/ella/Ud.": "á",
+      nosotros: "emos",
+      vosotros: "éis",
+      "ellos/ellas/Uds.": "án",
+    },
+    er: {
+      yo: "é",
+      tú: "ás",
+      "él/ella/Ud.": "á",
+      nosotros: "emos",
+      vosotros: "éis",
+      "ellos/ellas/Uds.": "án",
+    },
+    ir: {
+      yo: "é",
+      tú: "ás",
+      "él/ella/Ud.": "á",
+      nosotros: "emos",
+      vosotros: "éis",
+      "ellos/ellas/Uds.": "án",
+    },
+  },
+  Conditional: {
+    ar: {
+      yo: "ía",
+      tú: "ías",
+      "él/ella/Ud.": "ía",
+      nosotros: "íamos",
+      vosotros: "íais",
+      "ellos/ellas/Uds.": "ían",
     },
     er: {
       yo: "ía",
@@ -158,4 +210,18 @@ export const irregularStemsImperfect: { [key: string]: string } = {
   ir: "i",
   ver: "ve",
   ser: "er",
+};
+export const irregularStemsFutureConditional: { [key: string]: string } = {
+  decir: "dir",
+  hacer: "har",
+  poder: "podr",
+  poner: "pondr",
+  querer: "querr",
+  saber: "sabr",
+  salir: "saldr",
+  tener: "tendr",
+  valer: "valdr",
+  venir: "vendr",
+  haber: "habr",
+  caber: "cabr",
 };

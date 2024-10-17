@@ -3,6 +3,7 @@ import {
   irregularStemsPreterite,
   irregularStemsImperfect,
   verbEndings,
+  irregularStemsFutureConditional,
 } from "./constants";
 import { Person, Tense } from "./types";
 
@@ -91,20 +92,43 @@ export const applyStemChangeImperfect = (verb: string): string => {
   return verb.slice(0, -2);
 };
 
+export const applyStemChangeFuture = (verb: string): string => {
+  const verb_lower = verb.toLowerCase();
+  if (irregularStemsFutureConditional[verb_lower]) {
+    return irregularStemsFutureConditional[verb_lower];
+  }
+
+  return verb;
+};
+
+export const applyStemChangeConditional = (verb: string): string => {
+  // Conditional uses the same stems as future tense
+  return applyStemChangeFuture(verb);
+};
 export const conjugate = (
   verb: string,
   person: Person,
   tense: Tense
 ): string | null => {
   let stem;
-  if (tense === "Present") {
-    stem = applyStemChangePresent(verb);
-  } else if (tense === "Preterite") {
-    stem = applyStemChangePreterite(verb);
-  } else if (tense === "Imperfect") {
-    stem = applyStemChangeImperfect(verb);
-  } else {
-    stem = verb.slice(0, -2);
+  switch (tense) {
+    case "Present":
+      stem = applyStemChangePresent(verb);
+      break;
+    case "Preterite":
+      stem = applyStemChangePreterite(verb);
+      break;
+    case "Imperfect":
+      stem = applyStemChangeImperfect(verb);
+      break;
+    case "Future":
+      stem = applyStemChangeFuture(verb);
+      break;
+    case "Conditional":
+      stem = applyStemChangeConditional(verb);
+      break;
+    default:
+      stem = verb.slice(0, -2);
   }
 
   const ending = verb.slice(-2);

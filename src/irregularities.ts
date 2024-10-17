@@ -1,5 +1,5 @@
-import { Person, Tense, ConjugationTable } from './types';
-import { conjugate } from './conjugation';
+import { Person, Tense, ConjugationTable } from "./types";
+import { conjugate } from "./conjugation";
 
 export const checkIrregularities = (
   verb: string,
@@ -13,20 +13,15 @@ export const checkIrregularities = (
     if (person !== "nosotros" && person != "vosotros") {
       for (let j = 1; j < row.length; j++) {
         const tense = conjugationTable[0][j] as Tense;
-        if (
-          tense == "Present" ||
-          tense == "Imperfect" ||
-          tense == "Preterite"
-        ) {
-          const actual = row[j];
-          const predicted = conjugate(verb, person, tense);
 
-          if (predicted && predicted !== actual) {
-            console.log(
-              `Irregularity found: ${actual} vs ${predicted} on tense ${tense}`
-            );
-            irregularities.push(`(${person}) ${actual}`);
-          }
+        const actual = row[j];
+        const predicted = conjugate(verb, person, tense);
+
+        if (predicted && predicted !== actual) {
+          console.log(
+            `Irregularity found: ${actual} vs ${predicted} on tense ${tense}`
+          );
+          irregularities.push(`(${person}) ${actual}`);
         }
       }
     }
