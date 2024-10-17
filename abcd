@@ -1,0 +1,5 @@
+
+> sd-cli@1.0.0 dev /home/aj/sd-cli
+> tsx src/index.ts "tene"
+
+ ELIFECYCLE  Command failed with exit code 130.

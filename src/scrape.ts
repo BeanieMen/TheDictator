@@ -8,6 +8,12 @@ export const scrapeTables = async (verb: string) => {
     );
     const $ = load(data);
 
+    // some page searching magic to check if that shitty site is returning some other verb's conj
+    const headwordH1 = $("#headword-es h1");
+    if (!headwordH1.length || headwordH1.text().trim() !== verb) {
+      throw new Error(`Invalid verb: "${verb}" does not exist.`);
+    }
+
     const tablesData: string[][][] = [];
 
     $("table").each((index, table) => {
@@ -37,7 +43,6 @@ export const scrapeTables = async (verb: string) => {
       subjunctive: tablesData[2] || [],
     };
   } catch (error) {
-    console.error("Error scraping tables:", error);
-    return { indicative: [], subjunctive: [] };
+    return null;
   }
 };

@@ -4,16 +4,19 @@ import { checkIrregularities } from "./irregularities";
 
 const program = new Command();
 
-
-
 const main = async (verb: string) => {
   const verbConj = await scrapeTables(verb);
+
+  if (!verbConj || verbConj.indicative.length === 0) {
+    console.log(`"${verb}" is not a valid verb.`);
+    return;
+  }
+
   if (verbConj.indicative.length > 0) {
-    checkIrregularities(verb, verbConj.indicative)
+    checkIrregularities(verb, verbConj.indicative);
   }
 };
 
-// Define the CLI command and options
 program
   .version("1.0.0")
   .description("CLI tool to scrape Spanish verb conjugations from SpanishDict")
