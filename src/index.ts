@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { scrapeTables } from "./scrape";
-import { analyzeConjugation } from "./irregularities";
+import { checkIrregularities } from "./irregularities";
 
 const program = new Command();
 
@@ -9,7 +9,7 @@ const program = new Command();
 const main = async (verb: string) => {
   const verbConj = await scrapeTables(verb);
   if (verbConj.indicative.length > 0) {
-    console.log(analyzeConjugation(verb, verbConj.indicative))
+    checkIrregularities(verb, verbConj.indicative)
   }
 };
 
