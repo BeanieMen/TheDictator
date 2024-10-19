@@ -356,3 +356,4 @@ export const conjugateIndicative = (
   if (!verbEndings[tense]) return null;
   return stem + verbEndings[tense][ending][person];
 };
+

@@ -111,90 +111,14 @@ const subjunctiveEndings: {
   },
 };
 
-const getIrregularStemFromPreterite = (verb: string): string | null => {
-  const preteriteStems: { [key: string]: string } = {
-    tener: "tuv",
-    estar: "estuv",
-    andar: "anduv",
-    poder: "pud",
-    poner: "pus",
-    saber: "sup",
-    hacer: "hic",
-    querer: "quis",
-    venir: "vin",
-    decir: "dij",
-    traer: "traj",
-    conducir: "conduj",
-    producir: "produj",
-    traducir: "traduj",
-    caber: "cup",
-    haber: "hub",
-    ir: "fu",
-    ser: "fu",
-  };
-
-  return preteriteStems[verb.toLowerCase()] || null;
-};
-
-
-const applyStemChangeSubjunctivePresent = (verb: string): string => {
-  const verb_lower = verb.toLowerCase();
-  const base = verb.slice(0, -2);
-
-  // Handle spelling changes
-  switch (true) {
-    case verb.endsWith("car"):
-      return `${base.slice(0, -1)}qu`;
-    case verb.endsWith("gar"):
-      return `${base.slice(0, -1)}gu`;
-    case verb.endsWith("zar"):
-      return `${base.slice(0, -1)}c`;
-    case verb.endsWith("ger"):
-    case verb.endsWith("gir"):
-      return `${base.slice(0, -1)}j`;
-    case verb.endsWith("cer"):
-    case verb.endsWith("cir"):
-      if (!["nacer", "hacer", "decir"].includes(verb_lower)) {
-        return `${base.slice(0, -1)}zc`;
-      }
-      break;
-    case verb.endsWith("uir"):
-      return `${base}y`;
-  }
-
-  return base;
-};
-
-const applyStemChangeSubjunctiveImperfect = (verb: string): string => {
-  // Use the preterite-based stem for irregular verbs
-  const irregularStem = getIrregularStemFromPreterite(verb);
-  if (irregularStem) {
-    return irregularStem;
-  }
-
-  return verb.slice(0, -2);
-};
-
 export const conjugateSubjunctive = (
   verb: string,
   person: Person,
-  tense: SubjunctiveTense
+  tense: SubjunctiveTense,
+  preIndStem: string, // the yo pro
+  pretIndStem: string // the el/ella/ud pro
 ): string | null => {
-  let stem: string;
-
-  switch (tense) {
-    case "Present":
-      stem = applyStemChangeSubjunctivePresent(verb);
-      break;
-    case "ImperfectRA":
-    case "ImperfectSE":
-    case "Future":
-      stem = applyStemChangeSubjunctiveImperfect(verb);
-      break;
-    default:
-      return null;
-  }
-
+  const stem = tense == "Present" ? preIndStem : pretIndStem
   const ending = verb.slice(-2);
 
   if (!subjunctiveEndings[tense]) return null;

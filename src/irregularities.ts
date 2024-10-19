@@ -33,7 +33,7 @@ export const checkIrregularities = (
   } else {
     checkIndSubIrregularities(
       verb,
-      conjugationTable,
+      conjugationTables,
       relevantPersons,
       mood,
       irregularities
@@ -79,22 +79,36 @@ function checkImperativeIrregularities(
 
 function checkIndSubIrregularities(
   verb: string,
-  conjugationTable: string[][],
+  conjugationTables: ScrapedTables,
   relevantPersons: string[][],
   mood: Mood,
   irregularities: string[]
 ) {
-  const tenses = conjugationTable[0].slice(1);
-
+  const tenses = conjugationTables[mood][0].slice(1);
+  let preIndStem = conjugationTables.Indicative[1][1];
+  let pretIndStem = conjugationTables.Indicative[3][2];
+  preIndStem = preIndStem.substring(0, preIndStem.length - 1);
+  pretIndStem = pretIndStem.substring(0, pretIndStem.length - 1);
+  console.log(preIndStem, pretIndStem)
   for (const row of relevantPersons) {
     const person = row[0] as Person;
 
     for (const [index, tense] of tenses.entries()) {
       const actualForm = row[index + 1];
       if (actualForm === "-") continue;
+      let predictedForm: string | null;
 
-      const predictedForm = getConjugatedForm(verb, person, tense, mood);
-
+      if (mood == "Indicative")
+        predictedForm = conjugateIndicative(verb, person, tense as Tense);
+      else {
+        predictedForm = conjugateSubjunctive(
+          verb,
+          person,
+          tense as SubjunctiveTense,
+          preIndStem,
+          pretIndStem
+        );
+      }
       if (predictedForm && predictedForm !== actualForm) {
         console.log(
           `(${person}) Irregularity found: ${actualForm} vs ${predictedForm} on tense ${tense}`
@@ -102,21 +116,5 @@ function checkIndSubIrregularities(
         irregularities.push(`(${person}) ${actualForm}`);
       }
     }
-  }
-}
-
-function getConjugatedForm(
-  verb: string,
-  person: Person,
-  tense: string,
-  mood: Mood
-): string | null {
-  switch (mood) {
-    case "Indicative":
-      return conjugateIndicative(verb, person, tense as Tense);
-    case "Subjunctive":
-      return conjugateSubjunctive(verb, person, tense as SubjunctiveTense);
-    default:
-      return null;
   }
 }
