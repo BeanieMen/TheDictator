@@ -89,7 +89,6 @@ function checkIndSubIrregularities(
   let pretIndStem = conjugationTables.Indicative[3][2];
   preIndStem = preIndStem.substring(0, preIndStem.length - 1);
   pretIndStem = pretIndStem.substring(0, pretIndStem.length - 1);
-  console.log(preIndStem, pretIndStem)
   for (const row of relevantPersons) {
     const person = row[0] as Person;
 
@@ -98,7 +97,7 @@ function checkIndSubIrregularities(
       if (actualForm === "-") continue;
       let predictedForm: string | null;
 
-      if (mood == "Indicative")
+      if (mood === "Indicative")
         predictedForm = conjugateIndicative(verb, person, tense as Tense);
       else {
         predictedForm = conjugateSubjunctive(

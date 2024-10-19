@@ -118,7 +118,7 @@ export const conjugateSubjunctive = (
   preIndStem: string, // the yo pro
   pretIndStem: string // the el/ella/ud pro
 ): string | null => {
-  const stem = tense == "Present" ? preIndStem : pretIndStem
+  const stem = tense === "Present" ? preIndStem : pretIndStem
   const ending = verb.slice(-2);
 
   if (!subjunctiveEndings[tense]) return null;

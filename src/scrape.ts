@@ -1,12 +1,7 @@
 import axios from "axios";
 import { load } from "cheerio";
-import type { ConjugationTable } from "./types";
 
-export const scrapeTables = async (verb: string):  Promise<{
-  Indicative: ConjugationTable;
-  Subjunctive: ConjugationTable;
-  Imperative: ConjugationTable;
-} | null> => {
+export const scrapeTables = async (verb: string) => {
   try {
     const { data } = await axios.get(
       `https://www.spanishdict.com/conjugate/${verb}`
@@ -44,16 +39,31 @@ export const scrapeTables = async (verb: string):  Promise<{
     });
 
     if (tablesData[2]) {
-      const SubjunctiveHeader = ["", "Present", "ImperfectRA", "ImperfectSE", "Future"];      
+      const SubjunctiveHeader = [
+        "",
+        "Present",
+        "ImperfectRA",
+        "ImperfectSE",
+        "Future",
+      ];
       const transformedRows = tablesData[2].slice(1).map((row) => {
         const [pronoun, presentValue, imperfectValue, futureValue] = row;
-        const [imperfectRA, imperfectSE] = imperfectValue.split(",").map((s) => s.trim());
+        const [imperfectRA, imperfectSE] = imperfectValue
+          .split(",")
+          .map((s) => s.trim());
         return [pronoun, presentValue, imperfectRA, imperfectSE, futureValue];
       });
       tablesData[2] = [SubjunctiveHeader, ...transformedRows];
     }
 
+    const meanings: string[] = [];
+    $("div[id^='quickdef']").each((index, element) => {
+      const meaning = $(element).find("a").text().trim();
+      if (meaning) meanings.push(meaning);
+    });
+
     return {
+      meanings: meanings,
       Indicative: tablesData[1] || [],
       Subjunctive: tablesData[2] || [],
       Imperative: tablesData[3] || [],

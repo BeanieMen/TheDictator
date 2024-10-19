@@ -1,10 +1,9 @@
 import { Command } from "commander";
 import { scrapeTables } from "./scrape";
 import { checkIrregularities } from "./irregularities";
-import { writeFile, readFile } from "fs/promises";
-import { ConjugationTable } from "./types";
+import { writeFile, readFile } from "node:fs/promises";
+import type { ConjugationTable } from "./types";
 
-// Define a single type for the entire structure
 type VerbsCollection = {
   [x: string]: {
     conjugations: {
@@ -28,21 +27,27 @@ const saveToFile = async (data: VerbsCollection) => {
     try {
       const fileContent = await readFile(fileName, "utf-8");
       existingData = JSON.parse(fileContent) as VerbsCollection;
-    } catch (err: any) {
-      if (err.code !== "ENOENT") throw err;
+    } catch (err: unknown) {
+      console.log(`Error reading cache layer: ${err}`);
     }
     const updatedData: VerbsCollection = { ...existingData, ...data };
     await writeFile(fileName, JSON.stringify(updatedData, null, 2));
-    console.log(`Data successfully saved to ${fileName}`);
   } catch (err) {
     console.error(`Error saving file: ${err}`);
   }
 };
 
 const main = async (verb: string) => {
-  const verbConj = await scrapeTables(verb);
-  if (!verbConj) return;
+  const verbInfo = await scrapeTables(verb);
+  if (!verbInfo) return;
 
+  const verbConj = {
+    Indicative: verbInfo.Indicative,
+    Imperative: verbInfo.Imperative,
+    Subjunctive: verbInfo.Subjunctive,
+  };
+  console.log(`${verb}: ${verbInfo.meanings.join(", ")}`);
+  console.log("\n");
   console.log("Checking irregularities for the Indicative mood");
   const indicativeIrr = checkIrregularities(verb, verbConj, "Indicative");
   console.log("\n");
