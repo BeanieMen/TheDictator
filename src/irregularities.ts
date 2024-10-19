@@ -71,7 +71,7 @@ function checkImperativeIrregularities(
         console.log(
           `(${person}) Irregularity found: ${actualForm} vs ${predictedForm} on tense ${tense}`
         );
-        irregularities.push(`(${person}) ${actualForm}`);
+        irregularities.push(`(${person}) Irregularity found: ${actualForm} vs ${predictedForm} on tense ${tense}`);
       }
     }
   }
@@ -112,7 +112,7 @@ function checkIndSubIrregularities(
         console.log(
           `(${person}) Irregularity found: ${actualForm} vs ${predictedForm} on tense ${tense}`
         );
-        irregularities.push(`(${person}) ${actualForm}`);
+        irregularities.push(`(${person}) Irregularity found: ${actualForm} vs ${predictedForm} on tense ${tense}`);
       }
     }
   }
