@@ -1,7 +1,12 @@
 import axios from "axios";
 import { load } from "cheerio";
+import type { ConjugationTable } from "./types";
 
-export const scrapeTables = async (verb: string) => {
+export const scrapeTables = async (verb: string):  Promise<{
+  Indicative: ConjugationTable;
+  Subjunctive: ConjugationTable;
+  Imperative: ConjugationTable;
+} | null> => {
   try {
     const { data } = await axios.get(
       `https://www.spanishdict.com/conjugate/${verb}`
@@ -38,9 +43,20 @@ export const scrapeTables = async (verb: string) => {
       tablesData.push(tableData);
     });
 
+    if (tablesData[2]) {
+      const SubjunctiveHeader = ["", "Present", "ImperfectRA", "ImperfectSE", "Future"];      
+      const transformedRows = tablesData[2].slice(1).map((row) => {
+        const [pronoun, presentValue, imperfectValue, futureValue] = row;
+        const [imperfectRA, imperfectSE] = imperfectValue.split(",").map((s) => s.trim());
+        return [pronoun, presentValue, imperfectRA, imperfectSE, futureValue];
+      });
+      tablesData[2] = [SubjunctiveHeader, ...transformedRows];
+    }
+
     return {
-      indicative: tablesData[1] || [],
-      subjunctive: tablesData[2] || [],
+      Indicative: tablesData[1] || [],
+      Subjunctive: tablesData[2] || [],
+      Imperative: tablesData[3] || [],
     };
   } catch (error) {
     return null;

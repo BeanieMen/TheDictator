@@ -1,20 +1,27 @@
 import { Command } from "commander";
 import { scrapeTables } from "./scrape";
 import { checkIrregularities } from "./irregularities";
+import { conjugateIndicative } from "./conjugationIndicative";
+import { conjugateSubjunctive } from "./conjugationSubjunctive";
+import { conjugateImperative } from "./conjugationImperative";
 
 const program = new Command();
 
 const main = async (verb: string) => {
   const verbConj = await scrapeTables(verb);
+  if (!verbConj) return
 
-  if (!verbConj || verbConj.indicative.length === 0) {
-    console.log(`"${verb}" is not a valid verb.`);
-    return;
-  }
+  console.log("Checking irregularities for the Indicative mood");
+  checkIrregularities(verb, verbConj, "Indicative")
+  console.log("\n");
 
-  if (verbConj.indicative.length > 0) {
-    checkIrregularities(verb, verbConj.indicative);
-  }
+  console.log("Checking irregularities for the Subjunctive mood");
+  checkIrregularities(verb, verbConj, "Subjunctive")
+  console.log("\n");
+  
+  console.log("Checking irregularities for the Imperative mood");
+  checkIrregularities(verb, verbConj, "Imperative")
+  console.log("\n");
 };
 
 program
