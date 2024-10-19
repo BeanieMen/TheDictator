@@ -46,7 +46,7 @@ export const checkIrregularities = (
 function checkImperativeIrregularities(
   verb: string,
   conjugationTables: ScrapedTables,
-  relevantPersons: (string | number)[][],
+  relevantPersons: string[][],
   irregularities: string[]
 ): void {
   const imperativeTable = conjugationTables.Imperative;
@@ -79,8 +79,8 @@ function checkImperativeIrregularities(
 
 function checkIndSubIrregularities(
   verb: string,
-  conjugationTable: (string | number)[][],
-  relevantPersons: (string | number)[][],
+  conjugationTable: string[][],
+  relevantPersons: string[][],
   mood: Mood,
   irregularities: string[]
 ) {
@@ -93,12 +93,7 @@ function checkIndSubIrregularities(
       const actualForm = row[index + 1];
       if (actualForm === "-") continue;
 
-      const predictedForm = getConjugatedForm(
-        verb,
-        person,
-        tense.toString(),
-        mood
-      );
+      const predictedForm = getConjugatedForm(verb, person, tense, mood);
 
       if (predictedForm && predictedForm !== actualForm) {
         console.log(
