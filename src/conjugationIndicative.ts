@@ -211,6 +211,7 @@ const irregularStemsImperfect: { [key: string]: string } = {
   ver: "ve",
   ser: "er",
 };
+
 const irregularStemsFutureConditional: { [key: string]: string } = {
   decir: "dir",
   hacer: "har",

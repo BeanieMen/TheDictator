@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "lint": "biome lint",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

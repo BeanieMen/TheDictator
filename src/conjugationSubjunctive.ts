@@ -118,9 +118,15 @@ export const conjugateSubjunctive = (
   preIndStem: string, // the yo pro
   pretIndStem: string // the el/ella/ud pro
 ): string | null => {
-  const stem = tense === "Present" ? preIndStem : pretIndStem
+  const stem = tense === "Present" ? preIndStem : pretIndStem;
   const ending = verb.slice(-2);
 
   if (!subjunctiveEndings[tense]) return null;
-  return stem + subjunctiveEndings[tense][ending][person];
+  if (stem[stem.length-1] === subjunctiveEndings[tense][ending][person][0]) {
+    return (
+      stem.substring(0, stem.length - 1) +
+      subjunctiveEndings[tense][ending][person]
+    );
+  }
+    return stem + subjunctiveEndings[tense][ending][person];
 };
